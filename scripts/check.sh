@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Runs every offline check: format, lint, type-check, unit tests and a place build.
+# Tools: rojo, selene, stylua, luau-lsp, lune (see rokit.toml).
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+if [ ! -f globalTypes.d.luau ]; then
+	curl -sSfL -o globalTypes.d.luau https://raw.githubusercontent.com/JohnnyMorganz/luau-lsp/main/scripts/globalTypes.d.luau
+fi
+
+echo "== stylua"; stylua --check src tests
+echo "== selene"; selene src
+echo "== rojo sourcemap"; rojo sourcemap default.project.json -o sourcemap.json
+echo "== luau-lsp analyze"
+luau-lsp analyze --definitions=globalTypes.d.luau --sourcemap=sourcemap.json --no-strict-dm-types \
+	--flag:LuauSolverV2=false --ignore="tests/**" src
+echo "== lune tests"; lune run tests/run.luau
+echo "== rojo build"; mkdir -p build && rojo build default.project.json -o build/DontTouchTheGround.rbxl
+echo "All checks passed."
