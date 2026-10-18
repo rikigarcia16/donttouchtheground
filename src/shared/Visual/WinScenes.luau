@@ -41,7 +41,7 @@ local function cylinder(parent, height, diameter, cf, color, material, transpare
 	})
 end
 
-local function ringOf(parent, count, radius, cf, make)
+local function ringOf(_parent, count, radius, cf, make)
 	for i = 0, count - 1 do
 		local a = i / count * math.pi * 2
 		make(i, cf * CFrame.new(math.cos(a) * radius, 0, math.sin(a) * radius) * CFrame.Angles(0, -a, 0))
@@ -79,7 +79,7 @@ W.Podiums.podium_gold = function(stage, parent)
 			Enum.Material.Metal
 		)
 	end
-	ringOf(m, 14, 5.8, stage * CFrame.new(0, 0.9, 0), function(i, cf)
+	ringOf(m, 14, 5.8, stage * CFrame.new(0, 0.9, 0), function(_, cf)
 		piece(m, {
 			class = "WedgePart",
 			size = Vector3.new(0.3, 0.9, 0.9),

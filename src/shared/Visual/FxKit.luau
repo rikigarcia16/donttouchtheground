@@ -285,7 +285,7 @@ function FxKit.Part(self: Kit, props): BasePart
 end
 
 -- Welds a cosmetic part to a body part at `offset` (relative to that part).
-function FxKit.Weld(self: Kit, part: BasePart, bodyPart: BasePart, offset: CFrame): Weld
+function FxKit.Weld(_self: Kit, part: BasePart, bodyPart: BasePart, offset: CFrame): Weld
 	local weld = Instance.new("Weld")
 	weld.Part0 = bodyPart
 	weld.Part1 = part

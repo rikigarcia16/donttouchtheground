@@ -140,7 +140,7 @@ local function loadProfile(player: Player)
 	local raw: any = nil
 	local lockedByOther = false
 
-	for attempt = 1, DataCfg.LoadRetries do
+	for _ = 1, DataCfg.LoadRetries do
 		lockedByOther = false
 		local ok, result = updateWithRetry(key, function(old: any)
 			raw = nil

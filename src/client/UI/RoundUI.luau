@@ -494,7 +494,7 @@ function RoundUI.build(UI, controllers)
 	end
 	roundState:GetAttributeChangedSignal("State"):Connect(function()
 		local state = roundState:GetAttribute("State")
-		if state == "Intermission" then
+		if state == "Intermission" or state == "Lobby" then
 			Audio.PlayMusic("MusicLobby")
 		elseif state == "Preparation" then
 			local def = MapConfig.ById[roundState:GetAttribute("MapId") or ""]
@@ -505,8 +505,6 @@ function RoundUI.build(UI, controllers)
 			Audio.PlayMusic("MusicSuddenDeath")
 		elseif state == "Results" then
 			Audio.PlayMusic("MusicResults")
-		elseif state == "Lobby" then
-			Audio.PlayMusic("MusicLobby")
 		end
 		refreshVisibility()
 	end)

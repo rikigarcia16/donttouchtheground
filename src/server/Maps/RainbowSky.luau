@@ -59,7 +59,6 @@ return function(ctx)
 		"Normal",
 		"Normal",
 	}
-	local armEnds = {}
 	for arm = 0, ARMS - 1 do
 		for i = 0, STEPS - 1 do
 			local angle = arm * (math.pi * 2 / ARMS) + math.rad(i * 18)
@@ -93,9 +92,6 @@ return function(ctx)
 			end
 			local size = if kind == "Rotating" then Vector3.new(8, 1.2, 8) else Vector3.new(7, 1.2, 7)
 			P:Create(kind :: any, cf, size, options)
-			if i == STEPS - 1 then
-				table.insert(armEnds, { angle = angle, radius = radius, y = y })
-			end
 		end
 	end
 

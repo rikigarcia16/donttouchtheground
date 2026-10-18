@@ -239,7 +239,7 @@ end
 
 X.acc_gold_crown = function(kit)
 	local s = headScale(kit)
-	local points = circle(6, 0.55, 0.32, s, function(i, cf)
+	local points = circle(6, 0.55, 0.32, s, function(_, cf)
 		return {
 			class = "WedgePart",
 			size = v(0.12, 0.5, 0.4, s),
