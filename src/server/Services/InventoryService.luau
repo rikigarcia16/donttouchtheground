@@ -109,12 +109,42 @@ function InventoryService.ClaimCollection(player: Player, collectionId: string):
 	return { ok = true, reward = collection.reward }
 end
 
+local QUALITY = { Auto = true, Low = true, Medium = true, High = true }
+
+-- Settings arrive as a table; every field is type-checked and clamped.
+function InventoryService.UpdateSettings(player: Player, incoming: any)
+	if type(incoming) ~= "table" then
+		return
+	end
+	PlayerData.Update(player, { "settings" }, function(p)
+		local s = p.settings
+		if type(incoming.quality) == "string" and QUALITY[incoming.quality] then
+			s.quality = incoming.quality
+		end
+		if type(incoming.music) == "number" and incoming.music == incoming.music then
+			s.music = math.clamp(incoming.music, 0, 1)
+		end
+		if type(incoming.sfx) == "number" and incoming.sfx == incoming.sfx then
+			s.sfx = math.clamp(incoming.sfx, 0, 1)
+		end
+		if type(incoming.showOthersEffects) == "boolean" then
+			s.showOthersEffects = incoming.showOthersEffects
+		end
+		if type(incoming.reduceFlashing) == "boolean" then
+			s.reduceFlashing = incoming.reduceFlashing
+		end
+	end)
+end
+
 function InventoryService.Init(services)
 	PlayerData = services.PlayerDataService
 	Cosmetics = services.CosmeticService
 end
 
 function InventoryService.Start()
+	Guard.event(Remotes.event("SettingsUpdate"), { "any" }, 2, function(player, incoming)
+		InventoryService.UpdateSettings(player, incoming)
+	end)
 	Guard.func(Remotes.func("ToggleFavorite"), { "string", "boolean?" }, 6, function(player, itemId, value)
 		return InventoryService.ToggleFavorite(player, itemId, value)
 	end)

@@ -161,7 +161,7 @@ Harness.env = {
 	},
 	task = fakeTask,
 	game = fakeGame,
-	workspace = {},
+	workspace = roblox.Instance.new("Folder"),
 	typeof = typeof,
 	warn = function(...)
 		print("[warn]", ...)

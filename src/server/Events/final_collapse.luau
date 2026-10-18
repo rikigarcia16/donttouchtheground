@@ -38,11 +38,12 @@ return {
 		end
 		local structure = table.remove(ctx.structures, 1)
 		if structure and structure.Parent then
-			structure:SetAttribute("WarnUntil", ctx.now() + 1.5)
-			structure:SetAttribute("WarnStyle", "Collapse")
+			-- Structures (ramps) are plain parts: tint them, then drop them.
+			structure.Color = Color3.fromRGB(255, 60, 40)
+			structure.Material = Enum.Material.Neon
 			ctx.after(1.5, function()
 				structure.CanCollide = false
-				structure:SetAttribute("State", "Gone")
+				structure.Transparency = 1
 			end)
 		end
 	end,

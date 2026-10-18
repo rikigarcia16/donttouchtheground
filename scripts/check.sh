@@ -14,6 +14,7 @@ echo "== rojo sourcemap"; rojo sourcemap default.project.json -o sourcemap.json
 echo "== luau-lsp analyze"
 luau-lsp analyze --definitions=globalTypes.d.luau --sourcemap=sourcemap.json --no-strict-dm-types \
 	--flag:LuauSolverV2=false --ignore="tests/**" src
+echo "== property tables"; python3 scripts/check_props.py
 echo "== lune tests"; lune run tests/run.luau
 echo "== rojo build"; mkdir -p build && rojo build default.project.json -o build/DontTouchTheGround.rbxl
 echo "All checks passed."
