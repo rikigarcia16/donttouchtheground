@@ -5,11 +5,11 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 if [ ! -f globalTypes.d.luau ]; then
-	curl -sSfL -o globalTypes.d.luau https://raw.githubusercontent.com/JohnnyMorganz/luau-lsp/main/scripts/globalTypes.d.luau
+	curl -sSfL -o globalTypes.d.luau https://raw.githubusercontent.com/JohnnyMorganz/luau-lsp/1.53.0/scripts/globalTypes.d.luau
 fi
 
 echo "== stylua"; stylua --check src tests
-echo "== selene"; selene src
+if [ "${SKIP_SELENE:-0}" = "1" ]; then echo "== selene (skipped)"; else echo "== selene"; selene src; fi
 echo "== rojo sourcemap"; rojo sourcemap default.project.json -o sourcemap.json
 echo "== luau-lsp analyze"
 luau-lsp analyze --definitions=globalTypes.d.luau --sourcemap=sourcemap.json --no-strict-dm-types \

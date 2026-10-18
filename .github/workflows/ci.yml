@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install toolchain
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/bin" && cd "$HOME/bin"
+          fetch() { curl -sSfL -o tool.zip "$1" && unzip -oq tool.zip && rm tool.zip; }
+          fetch https://github.com/rojo-rbx/rojo/releases/download/v7.4.4/rojo-7.4.4-linux-x86_64.zip
+          fetch https://github.com/Kampfkarren/selene/releases/download/0.27.1/selene-0.27.1-linux.zip
+          fetch https://github.com/JohnnyMorganz/StyLua/releases/download/v0.20.0/stylua-linux-x86_64.zip
+          fetch https://github.com/JohnnyMorganz/luau-lsp/releases/download/1.53.0/luau-lsp-linux-x86_64.zip
+          fetch https://github.com/lune-org/lune/releases/download/v0.9.4/lune-0.9.4-linux-x86_64.zip
+          chmod +x rojo selene stylua luau-lsp lune
+          echo "$HOME/bin" >> "$GITHUB_PATH"
+
+      - name: Roblox type definitions
+        run: curl -sSfL -o globalTypes.d.luau https://raw.githubusercontent.com/JohnnyMorganz/luau-lsp/1.53.0/scripts/globalTypes.d.luau
+
+      - name: Generate selene Roblox std
+        run: selene generate-roblox-std
+
+      - name: Run all checks
+        run: ./scripts/check.sh
